@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>booleans</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="bootstrap.js" type="text/javascript"></script>
+    </head>
+    <body style="font: normal 16px Arial">
+        <script src="https://rawgit.com/e-dwar/miniconsole/master/miniconsole.js" type="text/javascript"></script>
+        <script type="text/javascript">
+
+mini.send('\
+Thing.subclass("True", function () {\n\
+    this.not = function () {\n\
+        return False.new();\n\
+    };\n\
+    this.xor = function (bool) {\n\
+        return bool.not();\n\
+    };\n\
+    this.and = function (bool) {\n\
+        return bool;\n\
+    };\n\
+    this.or = function (bool) {\n\
+        return this;\n\
+    };\n\
+    this.toString = function (bool) {\n\
+        return "true";\n\
+    };\n\
+});\
+');
+
+mini.send('\
+Thing.subclass("False", function () {\n\
+    this.not = function () {\n\
+        return True.new();\n\
+    };\n\
+    this.xor = function (bool) {\n\
+        return bool;\n\
+    };\n\
+    this.and = function (bool) {\n\
+        return this;\n\
+    };\n\
+    this.or = function (bool) {\n\
+        return bool;\n\
+    };\n\
+    this.toString = function (bool) {\n\
+        return "false";\n\
+    };\n\
+});\
+');
+
+mini.send('\
+t = True.new();\n\
+f = False.new();\n\
+void(0);\
+');
+
+mini.log('\
+/* not */\n\
+t.not()  = ' + t.not()  + '\n\
+f.not()  = ' + f.not()  + '\n\
+\n\
+/* xor */\n\
+t.xor(t) = ' + t.xor(t) + '\n\
+t.xor(f) = ' + t.xor(f) + '\n\
+f.xor(t) = ' + f.xor(t) + '\n\
+f.xor(f) = ' + f.xor(f) + '\n\
+\n\
+/* and */\n\
+t.and(t) = ' + t.and(t) + '\n\
+t.and(f) = ' + t.and(f) + '\n\
+f.and(t) = ' + f.and(t) + '\n\
+f.and(f) = ' + f.and(f) + '\n\
+\n\
+/* or */\n\
+t.or(t)  = ' + t.or(t) + '\n\
+t.or(f)  = ' + t.or(f) + '\n\
+f.or(t)  = ' + f.or(t) + '\n\
+f.or(f)  = ' + f.or(f) + '\
+');
+
+        </script>
+    </body>
+</html>

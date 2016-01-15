@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>jsobjvlisp</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="bootstrap.js" type="text/javascript"></script>
+    </head>
+    <body style="font: normal 16px Arial">
+        <script src="https://rawgit.com/e-dwar/miniconsole/master/miniconsole.js" type="text/javascript"></script>
+        <script type="text/javascript">
+
+mini.send('\
+/* Person */\n\
+\n\
+Thing.subclass("Person", function (sup) {\n\
+    this.init = function (name) {\n\
+        this.name = name;\n\
+    };\n\
+    this.toString = function () {\n\
+        return this.name;\n\
+    };\n\
+});\
+');
+
+mini.send('\
+/* Employee */\n\
+\n\
+Person.subclass("Employee", function (sup) {\n\
+    this.init = function (name, ssn) {\n\
+        sup.init.call(this, name, ssn);\n\
+        this.ssn = ssn;\n\
+    };\n\
+    this.toString = function () {\n\
+        return sup.toString.call(this)\n\
+        + "\\nSSN: " + this.ssn + ".";\n\
+    };\n\
+});\
+');
+
+mini.send('\
+/* SalariedEmployee */\n\
+\n\
+Employee.subclass("SalariedEmployee", function (sup) {\n\
+    this.init = function (name, ssn, weeklySalary) {\n\
+        sup.init.call(this, name, ssn);\n\
+        this.weeklySalary = weeklySalary;\n\
+    };\n\
+    this.toString = function () {\n\
+        return sup.toString.call(this)\n\
+        + "\\nWeekly salary: " + this.weeklySalary + ".";\n\
+    };\n\
+});\
+');
+
+mini.send('\
+/* HourlyEmployee */\n\
+\n\
+Employee.subclass("HourlyEmployee", function (sup) {\n\
+    this.init = function (name, ssn, hourlyWage) {\n\
+        sup.init.call(this, name, ssn);\n\
+        this.hourlyWage = hourlyWage;\n\
+    };\n\
+    this.earnings = function (hoursWorked) {\n\
+        var wage = this.hourlyWage;\n\
+        if (hoursWorked <= 40) {\n\
+            return wage * hoursWorked;\n\
+        } else {\n\
+            return 40 * wage + (hoursWorked - 40) * wage * 1.5;\n\
+        }\n\
+    };\n\
+    this.toString = function () {\n\
+        return sup.toString.call(this)\n\
+        + "\\nHourly wage: " + this.hourlyWage + ".";\n\
+    };\n\
+});\
+');
+
+mini.send('\
+var nobody = Person.new("Nobody");\n\
+var joe = Employee.new("Joe", "111-11-1111");\n\
+var karen = SalariedEmployee.new("Karen", "222-22-2222", 1000);\n\
+var sue = HourlyEmployee.new("Sue", "333-33-3333", 16.75);\n\
+void(0)\
+');
+
+mini.send('nobody + ""');
+mini.send('joe + ""');
+mini.send('karen + ""');
+mini.send('sue + ""');
+mini.send('sue.earnings(41)');
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>jsobjvlisp</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <script src="bootstrap.js" type="text/javascript"></script>
+    </head>
+    <body style="font: normal 16px Arial">
+        <script src="https://rawgit.com/e-dwar/miniconsole/master/miniconsole.js" type="text/javascript"></script>
+        <script type="text/javascript">
+
+mini.send('\
+/* Person */\n\
+\n\
+Person = Class.send("new", [{\n\
+    id: "Person",\n\
+    superId: "Thing",\n\
+    ivs: ["name"]\n\
+}]);\n\
+Person.addMethod("toString", function () {\n\
+    return this.send("get", ["name"]);\n\
+});\
+');
+
+mini.send('\
+/* Employee */\n\
+\n\
+Employee = Class.send("new", [{\n\
+    id: "Employee",\n\
+    superId: "Person",\n\
+    ivs: ["ssn"]\n\
+}]);\n\
+Employee.addMethod("toString", function () {\n\
+    return this.superSend("toString", [])\n\
+    + "\\nSSN: " + this.send("get", ["ssn"]) + ".";\n\
+});\
+');
+
+mini.send('\
+/* SalariedEmployee */\n\
+\n\
+SalariedEmployee = Class.send("new", [{\n\
+    id: "SalariedEmployee",\n\
+    superId: "Employee",\n\
+    ivs: ["weeklySalary"]\n\
+}]);\n\
+SalariedEmployee.addMethod("toString", function () {\n\
+    return this.superSend("toString", [])\n\
+    + "\\nWeekly salary: " + this.send("get", ["weeklySalary"]) + ".";\n\
+});\
+');
+
+mini.send('\
+/* HourlyEmployee */\n\
+\n\
+HourlyEmployee = Class.send("new", [{\n\
+    id: "HourlyEmployee",\n\
+    superId: "Employee",\n\
+    ivs: ["hourlyWage"]\n\
+}]);\n\
+HourlyEmployee.addMethod("toString", function () {\n\
+    return this.superSend("toString", [])\n\
+    + "\\nHourly wage: " + this.send("get", ["hourlyWage"]) + ".";\n\
+});\n\
+HourlyEmployee.addMethod("earnings", function (hoursWorked) {\n\
+    var wage = this.send("get", ["hourlyWage"]);\n\
+    if (hoursWorked <= 40) {\n\
+        return wage * hoursWorked;\n\
+    } else {\n\
+        return 40 * wage + (hoursWorked - 40) * wage * 1.5;\n\
+    }\n\
+});\
+');
+
+mini.send('\
+var nobody = Person.send("new", [{\n\
+    name: "Nobody"\n\
+}]);\n\
+var joe = Employee.send("new", [{\n\
+    name: "Joe",\n\
+    ssn: "111-11-1111"\n\
+}]);\n\
+var karen = SalariedEmployee.send("new", [{\n\
+    name: "Karen",\n\
+    ssn: "222-22-2222",\n\
+    weeklySalary: 1000\n\
+}]);\n\
+var sue = HourlyEmployee.send("new", [{\n\
+    name: "Sue",\n\
+    ssn: "333-33-3333",\n\
+    hourlyWage: 16.75\n\
+}]);\n\
+void(0)\
+');
+
+mini.send('nobody.send("toString", [])');
+mini.send('joe.send("toString", [])');
+mini.send('karen.send("toString", [])');
+mini.send('sue.send("toString", [])');
+mini.send('sue.send("earnings", [41])');
+
+        </script>
+    </body>
+</html>
